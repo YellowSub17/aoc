@@ -3,7 +3,7 @@
 import pprint
 import itertools
 
-def make_dict(fname='input.prod'):
+def make_dict(fname='input.prod', add_me=False):
 
     rel = {}
 
@@ -28,42 +28,28 @@ def make_dict(fname='input.prod'):
 
         rel[p1][p2] = points
 
+    if add_me:
+
+        rel['me'] = {}
+        for p1 in rel.keys():
+            rel[p1]['me'] = 0
+            rel['me'][p1] = 0
+
+
+
     return rel
 
 
 
-def find_best_partner(p1, rel, skip=[]):
-    current_points = 0
-    x1 = ''
-    for p2 in rel[p1].keys():
-        if p2 in skip:
-            continue
-        pair_points = rel[p1][p2] + rel[p2][p1]
-        if pair_points > current_points:
-            current_points = pair_points
-            x1 = str(p2)
+def calc_table_happy(table, rel):
 
-    return x1
+    happy = 0
+    for p1, p2 in zip(table, table[1:]):
+        happy += rel[p1][p2] + rel[p2][p1]
 
+    happy +=  rel[table[0]][table[-1]] + rel[table[-1]][table[0]]
 
-def find_best_match(rel):
-
-    x1 = ''
-    x2 = ''
-    current_points = 0
-    for p1 in rel.keys():
-        for p2 in rel[p1].keys():
-
-            if p1 ==p2:
-                continue
-
-            pair_points = rel[p1][p2] + rel[p2][p1]
-            if pair_points > current_points:
-                current_points = pair_points
-                x1 = str(p1)
-                x2 = str(p2)
-
-    return x1,x2
+    return happy
 
 
 
@@ -73,43 +59,42 @@ def find_best_match(rel):
 if __name__ == '__main__':
 
     rel = make_dict()
-    table = []
+
 
     names = list(rel.keys())
 
-    x, y = find_best_match(rel)
-    print('The best pairing is:', x, 'and', y)
-    table.append(x)
-    table.append(y)
-    print('The table is now:', table)
+    tables = itertools.permutations(names)
 
-    for i in range(len(names)-2):
+    current_happy = 0
+    for table in tables:
+        happy = calc_table_happy(list(table), rel)
+        if happy > current_happy:
+            current_happy = happy
 
-        y = find_best_partner(table[-1], rel, skip=table)
-        print('The two best partners for', table[-1], 'is', y)
-        table.append(y)
-        print('The table is now:', table)
-
-
-
-    points  = 0
-    for p1, p2 in zip(table, table[1:]):
-        print(p1,p2)
-        points += rel[p1][p2] + rel[p2][p1]
-
-    points += rel[table[-1]][table[0]] + rel[table[0]][table[-1]]
-    print(points)
+    print(current_happy)
 
 
 
 
+    rel = make_dict(add_me=True)
 
 
+    names = list(rel.keys())
+
+    tables = itertools.permutations(names)
+
+    current_happy2= 0
+    for table in tables:
+        happy = calc_table_happy(list(table), rel)
+        if happy > current_happy2:
+            current_happy2 = happy
+
+    print(current_happy2)
 
 
-    # print(rel)
-    # print(rel[z][x] + rel[x][z])
-    # print(rel[z][y] + rel[y][z])
+    print(current_happy2 - current_happy)
+
+
 
 
 
