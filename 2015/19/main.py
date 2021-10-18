@@ -16,11 +16,6 @@ class Factory:
         self.rules_str = rules_str
 
         self.rules_dict = {}
-
-        self.found_paths = []
-        self.current_shortest_path = 99
-
-        self.quit_flag = False
         
 
         for replacement in self.rules_str.split('\n')[:-1]:
@@ -67,11 +62,17 @@ class Factory:
 
         return replaced_strs
 
+    
+    def calibrate(self):
+        print(len(self.expand(self.input_str)))
+
 
 
 
 
 class InverseFactory:
+
+    def __init__(self, input_str, rules_str):
 
         self.input_str = input_str[:-1]
         self.rules_str = rules_str
@@ -89,52 +90,22 @@ class InverseFactory:
             RHS = replacement.split(' ')[0]
 
 
-            if LHS in self.rules_dict.keys():
-
-                self.rules_dict[LHS].append(RHS)
-            else:
-                self.rules_dict[LHS] = [RHS]
+            self.rules_dict[LHS] = RHS
 
 
-    # def fabricate(self, current_path=['e']):
+    
+    def contract(self, molecule):
 
+        rules_LHS = list(self.rules_dict.keys())
+        rules_LHS.sort( key=lambda x : len(x))
 
-
-        # max_molecule_length = len(self.input_str)
-        # max_path_length=1098
-        # print(len(current_path[-1]))
-
-
-        # if len(current_path) > max_path_length:
-            # return False
-        # if len(current_path[-1])> max_molecule_length:
-            # # print(f'molecule {current_path[-1]} is too long')
-            # return False
-
+        # return(rules_LHS)
         
+        for LHS in rules_LHS[::-1]:
 
-        # expanded_molecules = self.expand(current_path[-1])
 
-        # if self.input_str in expanded_molecules:
-
-            # new_path = list(current_path)
-            # new_path.append(self.input_str)
-# #             print()
-            # # print('FOUND PATH')
-            # # print(new_path)
-            # # print()
-            # self.found_paths.append(new_path)
-            # if len(current_path) < self.current_shortest_path:
-                # self.current_shortest_path = len(new_path)
-
-            # print(f'\t{len(self.found_paths)}')
-
-        # else:
-            # for molecule in expanded_molecules:
-
-                # new_path = list(current_path)
-                # new_path.append(molecule)
-                # self.fabricate(new_path)
+            n_replacements = molecule.count(LHS)
+            print(LHS, n_replacements)
 
 
 
@@ -148,10 +119,6 @@ class InverseFactory:
 
 
 
-
-    def calibrate(self):
-
-        print(len(self.expand(self.input_str)))
 
 
 
@@ -180,13 +147,15 @@ if __name__ == '__main__':
     f = Factory(input_str, rules_str)
 
     #PART1
-    # f.calibrate()
+    f.calibrate()
+
+
+    f = InverseFactory(input_str, rules_str)
 
 
 
 
 
-    invf = InverseFactory(input_str, rules_str)
 #     #PART2
 #     input_str = 'dy'
     # rules_dict = {
