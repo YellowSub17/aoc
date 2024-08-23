@@ -1,37 +1,64 @@
 #!/usr/bin/env python3
 
 
-if __name__ == '__main__':
 
-    fname = 'input.test'
-    
-    store_cap = 25
+import itertools
 
-    f = open(fname, 'r')
-    cont = f.read().split('\n')[:-1]
-    print(cont)
+fname = 'input.prod'
 
+store_cap = 150
 
-    all_containers = [ int(amount) for amount in cont]
-    print(all_containers)
+f = open(fname, 'r')
+cont = f.read().split('\n')[:-1]
+print(cont)
 
-
-    def recurse_engine(container_choices=all_containers, containers_used=[], limit=25, known_codes=0):
+all_containers = [ int(amount) for amount in cont]
+print(all_containers)
 
 
-        current_cap = 0
-        code = ''
-        for label, amount in enumerate(containers_used):
-            current_cap +=x
-            code += str(i)
+valid_combos = []
+for n in range(len(all_containers)):
+    print(f"{n=}")
+
+    for ith_combo_with_n in itertools.combinations(all_containers,n):
+
+        sum_combo = sum(ith_combo_with_n)
+
+        # print(ith_combo_with_n, sum_combo)
+
+        if sum_combo==store_cap:
+            valid_combos.append(ith_combo_with_n)
+
+
+print(f"number of valid combos: {len(valid_combos)}")
+
+
+min_num_containers = len(valid_combos[0])
+
+for combo in valid_combos:
+    if len(combo) < min_num_containers:
+        min_num_containers=len(combo)
 
 
 
-        for label, amount in enumerate(container_choices):
+print(valid_combos)
+print(min_num_containers)
 
-            if current_cap + amount < limit
-                current_cap +=x
-                code += i
+num_containers_with_min = 0
+
+for combo in valid_combos:
+    if len(combo)==min_num_containers:
+        num_containers_with_min +=1
+
+
+print(num_containers_with_min)
+
+
+
+
+
+
+
 
 
 
