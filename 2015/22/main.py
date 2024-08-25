@@ -22,12 +22,8 @@ class Game:
         self.shield_timer = 0
         self.poison_timer = 0
         self.recharge_timer = 0
-
         self.total_mana_spent = 0
-
-
         self.gameover = 0
-
         self.n_rounds = 0
         self.hard = hard
         self.log_stats()
@@ -40,7 +36,7 @@ class Game:
 
 
     def attack(self):
-        logger.info('Boss attacks!')
+        logger.info(f'Boss attacks, dealing {max(1, self.b_damage-self.p_armour)}.')
         self.p_health -= max(1, self.b_damage-self.p_armour)
         if self.p_health <=0:
             logger.info('Boss has killed player.')
@@ -167,7 +163,6 @@ class Game:
                 logger.info(f'Player died from hardmode!')
                 self.gameover = -1
 
-
         if self.gameover != 0:
             self.log_stats()
             return self.gameover, self.total_mana_spent
@@ -179,7 +174,6 @@ class Game:
         if self.gameover != 0:
             self.log_stats()
             return self.gameover, self.total_mana_spent
-
 
 
         if spell == 'a':
@@ -241,12 +235,17 @@ if __name__ == '__main__':
 
 
 #     example_winning_key =('e', 'd', 'c', 'a', 'a', 'd', 'a', 'a', 'a', 'a')
-    # max_mana = 953
-    # max_turns = 10
     # g = Game(False)
     # state, mana = g.run_sim(example_winning_key)
+    # print(state, mana)
 
 
+
+
+    # example_winning_key = ('e', 'c', 'b', 'e', 'c', 'b', 'b', 'c', 'a', 'a', 'a', 'a', 'a')
+    # g = Game(True)
+    # state, mana = g.run_sim(example_winning_key)
+    # print(state, mana)
 
 
 
@@ -276,12 +275,13 @@ if __name__ == '__main__':
                 min_mana = mana
 
     print()
-    print(f'live ends: {len(live_ends)}')
+    print(f'AAA) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
     print()
 
 
-
-    
     starting_scrolls = live_ends[:]
     live_ends = []
     mid_scrolls = list(itertools.product('abcde', repeat=3))
@@ -298,11 +298,15 @@ if __name__ == '__main__':
                 if mana < min_mana:
                     min_mana = mana
             if state == 0:
-                live_ends.append(game_key)
+                if mana < min_mana:
+                    live_ends.append(game_key)
 
 
     print()
-    print(f'live ends: {len(live_ends)}')
+    print(f'BBB) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
     print()
 
     starting_scrolls = live_ends[:]
@@ -322,17 +326,139 @@ if __name__ == '__main__':
                 if mana < min_mana:
                     min_mana = mana
             if state == 0:
-                live_ends.append(game_key)
+
+                if mana < min_mana:
+                    live_ends.append(game_key)
 
     print()
-    print(f'live ends: {len(live_ends)}')
+    print(f'CCC) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
+    print()
+
+    starting_scrolls = live_ends[:]
+    live_ends = []
+    mid_scrolls = list(itertools.product('abcde', repeat=1))
+    for i_starting_scroll, starting_scroll in enumerate(starting_scrolls):
+        print(i_starting_scroll, end='\r')
+        for i_mid_scroll, mid_scroll in enumerate(mid_scrolls):
+
+            g = Game(hard=hard)
+            game_key = starting_scroll+mid_scroll
+            state, mana = g.run_sim(game_key)
+
+            if state == 1:
+                logging.critical(f'{game_key} {mana}')
+
+                if mana < min_mana:
+                    min_mana = mana
+            if state == 0:
+
+                if mana < min_mana:
+                    live_ends.append(game_key)
+
+    print()
+    print(f'DDD) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
+    print()
+
+
+    starting_scrolls = live_ends[:]
+    live_ends = []
+    mid_scrolls = list(itertools.product('abcde', repeat=1))
+    for i_starting_scroll, starting_scroll in enumerate(starting_scrolls):
+        print(i_starting_scroll, end='\r')
+        for i_mid_scroll, mid_scroll in enumerate(mid_scrolls):
+
+            g = Game(hard=hard)
+            game_key = starting_scroll+mid_scroll
+            state, mana = g.run_sim(game_key)
+
+            if state == 1:
+                logging.critical(f'{game_key} {mana}')
+
+                if mana < min_mana:
+                    min_mana = mana
+            if state == 0:
+
+                if mana < min_mana:
+                    live_ends.append(game_key)
+
+    print()
+    print(f'EEE) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
+    print()
+
+
+    starting_scrolls = live_ends[:]
+    live_ends = []
+    mid_scrolls = list(itertools.product('abcde', repeat=1))
+    for i_starting_scroll, starting_scroll in enumerate(starting_scrolls):
+        print(i_starting_scroll, end='\r')
+        for i_mid_scroll, mid_scroll in enumerate(mid_scrolls):
+
+            g = Game(hard=hard)
+            game_key = starting_scroll+mid_scroll
+            state, mana = g.run_sim(game_key)
+
+            if state == 1:
+                logging.critical(f'{game_key} {mana}')
+
+                if mana < min_mana:
+                    min_mana = mana
+            if state == 0:
+
+                if mana < min_mana:
+                    live_ends.append(game_key)
+
+    print()
+    print(f'FFF) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
+    print()
+
+    starting_scrolls = live_ends[:]
+    live_ends = []
+    mid_scrolls = list(itertools.product('abcde', repeat=1))
+    for i_starting_scroll, starting_scroll in enumerate(starting_scrolls):
+        print(i_starting_scroll, end='\r')
+        for i_mid_scroll, mid_scroll in enumerate(mid_scrolls):
+
+            g = Game(hard=hard)
+            game_key = starting_scroll+mid_scroll
+            state, mana = g.run_sim(game_key)
+
+            if state == 1:
+                logging.critical(f'{game_key} {mana}')
+
+                if mana < min_mana:
+                    min_mana = mana
+            if state == 0:
+
+                if mana < min_mana:
+                    live_ends.append(game_key)
+
+    print()
+    print(f'GGG) live ends: {len(live_ends)}')
+    if len(live_ends)>0:
+        print(f'example live_end: {live_ends[-1]}')
+    print(f'Current mana min: {min_mana}')
     print()
 
 
 
-    print()
-    print()
-    print(f'Min mana to win: {min_mana}')
+
+
+
+
+
+
 
 
 
