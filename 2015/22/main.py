@@ -1,4 +1,4 @@
-
+import time
 import numpy as np
 import itertools
 
@@ -58,12 +58,12 @@ class Game:
 
     def cast_drain(self):
         logger.info('Player casts drain dealing 2 damage and healing 2 points.')
-        if self.p_mana<74:
+        if self.p_mana<73:
             logger.info('Attempted to cast drain, but not enough mana')
             self.gameover = -1
             return
-        self.p_mana -= 74
-        self.total_mana_spent += 74
+        self.p_mana -= 73
+        self.total_mana_spent += 73
         self.b_health -= 2
         self.p_health += 2
         if self.b_health <=0:
@@ -251,12 +251,15 @@ if __name__ == '__main__':
 
 
 
+    print(time.asctime())
 
 
 
 
     min_mana = 9999
-    hard =True
+
+    hard =False ### ~1 minute
+    hard =True ### ~2 minute 10 seconds
 
 
     logging.disable(logging.INFO)
@@ -456,6 +459,7 @@ if __name__ == '__main__':
 
 
 
+    print(time.asctime())
 
 
 
