@@ -1,4 +1,4 @@
-
+#![allow(unused)]
 
 use std::fs;
 
