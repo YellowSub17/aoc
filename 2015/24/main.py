@@ -25,9 +25,6 @@ def group_generator(weights, weight_p_group):
 
 
 
-# x = [g for g in group_generator(WEIGHTS, 508)]
-
-# print(x[:4])
 
 
 
@@ -94,7 +91,6 @@ print(ideal(WEIGHTS, 3))
 
 
 
-    
     # count +=1
 
 
