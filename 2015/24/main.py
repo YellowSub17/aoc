@@ -23,13 +23,6 @@ def group_generator(weights, weight_p_group):
                 yield set(group)
 
 
-
-
-
-
-
-
-
 def can_group(weights, n_groups, weight_p_group):
     if n_groups ==0:
         if len(weights)==0:

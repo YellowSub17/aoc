@@ -15,77 +15,77 @@ with open('./input.prod') as f:
 
 
 
+def p1decompress(s):
 
 
-def part1(s):
-
-    index = 0
-    while index < len(s):
-        if s[index] == '(':
-
-            inner_brackets = s[index:].split(')')[0][1:]
-
-            brackets_len = len(inner_brackets) +2
-
-            nchars, rep = map(int, inner_brackets.split('x'))
-
-            start_ind = index+brackets_len
-            end_ind = start_ind + nchars
-            next_nchars = s[start_ind:end_ind]
-
-            lhs = s[:index]
-            rhs = s[end_ind:]
-
-            s = lhs+next_nchars*rep+rhs
-
-            index += rep*nchars
+    # if there are no decompress markers
+    if '(' not in s:
+        return len(s) #return the length of the string
 
 
-
-        else:
-            index +=1
-
-
-    return s
+    # init a value for tracking the current length
+    val = 0
 
 
+    #while there is still a decomp marker:
+    while '(' in s:
+
+        val += s.find('(') # add the letters before the first marker
+
+        s = s[s.find('('):] #remove everything in the string upto the first marker
+
+        nchars, reps = map(int, s[1:s.find(')')].split('x')) # get the nchars and reps for the first marker
+
+        s = s[s.find(')')+1:] # remove the marker
+
+        val += nchars*reps #add the value after expanding the decomp marker
+
+        s = s[nchars:]
+
+    val += len(s)
+
+    return val
+
+
+## thanks reddit
+def p2decompress(s):
+
+
+    # if there are no decompress markers
+    if '(' not in s:
+        return len(s) #return the length of the string
+
+
+    # init a value for tracking the current length
+    val = 0
+
+
+    #while there is still a decomp marker:
+    while '(' in s:
+
+        val += s.find('(') # add the letters before the first marker
+
+        s = s[s.find('('):] #remove everything in the string upto the first marker
+
+        nchars, reps = map(int, s[1:s.find(')')].split('x')) # get the nchars and reps for the first marker
+
+        s = s[s.find(')')+1:] # remove the marker
+
+        val += p2decompress(s[:nchars]*reps) #add the value after expanding the decomp marker
+
+        s = s[nchars:]
+
+        # print(val, end='\r')
+
+    val += len(s)
+
+    return val
 
 
 
-def part2(s):
 
 
-    index = 0
-    while index < len(s):
-
-        print(f'{index}', end='\r')
-        if s[index] == '(':
-
-            inner_brackets = s[index:].split(')')[0][1:]
-
-            brackets_len = len(inner_brackets) +2
-
-            nchars, rep = map(int, inner_brackets.split('x'))
-
-            start_ind = index+brackets_len
-            end_ind = start_ind + nchars
-            next_nchars = s[start_ind:end_ind]
-
-            lhs = s[:index]
-            rhs = s[end_ind:]
-
-            s = lhs+next_nchars*rep+rhs
-
-            # index += rep*nchars
-
-
-
-        else:
-            index +=1
-
-
-    return s
-
+# print(p1decompress(contents))
 
 
 
@@ -96,26 +96,36 @@ def part2(s):
 
 def tests_p1():
 
-    assert 'ADVENT' == part1('ADVENT')
-    assert 'ABBBBBC' == part1('A(1x5)BC')
-    assert 'XYZXYZXYZ' == part1('(3x3)XYZ')
-    assert 'ABCBCDEFEFG' == part1('A(2x2)BCD(2x2)EFG')
-    assert '(1x3)A' == part1('(6x1)(1x3)A')
-    assert 'X(3x3)ABC(3x3)ABCY' == part1('X(8x2)(3x3)ABCY')
-
-    assert part1('xyz(3x4)abc(2x2)opkl') == 'xyzabcabcabcabcopopkl'
+    assert len('ADVENT') == p1decompress('ADVENT')
+    assert len('ABBBBBC') == p1decompress('A(1x5)BC')
+    assert len('XYZXYZXYZ') == p1decompress('(3x3)XYZ')
+    assert len('ABCBCDEFEFG') == p1decompress('A(2x2)BCD(2x2)EFG')
+    assert len('(1x3)A') == p1decompress('(6x1)(1x3)A')
+    assert len('X(3x3)ABC(3x3)ABCY') == p1decompress('X(8x2)(3x3)ABCY')
 
 
+def tests_p2():
 
-    assert part1('xyz(5x4)(9x9)(2x2)opkl') == 'xyz(9x9)(9x9)(9x9)(9x9)opopkl'
+    assert len('XYZXYZXYZ') ==p2decompress('(3x3)XYZ')
+    assert p2decompress('X(8x2)(3x3)ABCY') ==len('XABCABCABCABCABCABCY')
+    assert 241920 ==p2decompress('(27x12)(20x12)(13x14)(7x10)(1x12)A')
+    assert 445 == p2decompress('(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN')
+
+
+
+# tests_p2()
+
+
+print(p2decompress(contents))
 
 
 
 
 
-print(contents)
 
-print(len(part2(contents)))
+
+
+
 
 
 
