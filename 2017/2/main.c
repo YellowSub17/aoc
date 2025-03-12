@@ -7,22 +7,113 @@
 #include <stdbool.h>
 
 
-char *readFile(char *filename) {
-    FILE *f = fopen(filename, "rt");
-    assert(f);
-    fseek(f, 0, SEEK_END);
-    long length = ftell(f);
-    fseek(f, 0, SEEK_SET);
-    char *buffer = (char *) malloc(length + 1);
-    buffer[length] = '\0';
-    fread(buffer, 1, length, f);
-    fclose(f);
-    return buffer;
+
+
+
+void part2(void){
+
+    int ncols = 0;
+    int nrows = -1;
+    int nele = -1;
+    
+    int MAXCHAR = 1000;
+    char row[MAXCHAR];
+    char* token;
+    
+
+    FILE *fp1 = fopen("./input.prod","r");
+    while (feof(fp1) != true){
+        fgets(row, MAXCHAR, fp1);
+        /*printf("Row: %s", row);*/
+
+        nrows++;
+
+        token = strtok(row, "\t");
+
+        while(token != NULL){
+            /*printf("Token: %s\n", token);*/
+            token = strtok(NULL, "\t");
+            nele++;
+        }
+
+    }
+    /*printf("%d\n", nrows);*/
+    /*printf("%d\n", nele);*/
+    ncols = nele / nrows;
+
+    int table[nrows][ncols];
+    int i=0;
+    int j=0;
+    FILE *fp2 = fopen("./input.prod","r");
+    while (feof(fp2) != true){
+
+        fgets(row, MAXCHAR, fp2);
+
+        token = strtok(row, "\t");
+        /*printf("%d, %d, %s\n", i, j, token);*/
+        table[i][j] = atoi(token);
+        j++;
+
+        while(token != NULL){
+            token = strtok(NULL, "\t");
+            /*printf("%d, %d, %s\n", i, j, token);*/
+            table[i][j] = atoi(token);
+            j++;
+
+            if (j==16){
+                break;
+            }
+        }
+
+        j=0;
+        i++;
+
+        if (i==16){
+            break;
+        }
+    }
+
+
+
+    
+
+    int checksum = 0;
+    for (int r=0; r<nrows; r++){
+
+
+        for (int div1_ind=0; div1_ind <ncols;div1_ind++){
+
+            for (int div2_ind = 0; div2_ind <ncols; div2_ind++){
+
+
+                int div1 = table[r][div1_ind];
+                int div2 = table[r][div2_ind];
+
+                if (div1 <= div2){continue;}
+
+
+                if (div1 % div2 == 0){
+                    /*printf("(%d, %d): %d / %d = %d rem %d\n", div1_ind, div2_ind, div1, div2, div1/div2, div1 % div2);*/
+                    checksum = checksum + (div1/div2);
+                }
+
+
+
+            }
+
+
+        }
+
+    }
+    printf("Checksum: %d\n", checksum);
+
+
+
 }
 
 
 
-void main(void){
+void part1(void){
 
 
     int ncols = 0;
@@ -50,8 +141,8 @@ void main(void){
         }
 
     }
-    printf("%d\n", nrows);
-    printf("%d\n", nele);
+    /*printf("%d\n", nrows);*/
+    /*printf("%d\n", nele);*/
     ncols = nele / nrows;
 
     int table[nrows][ncols];
@@ -61,10 +152,10 @@ void main(void){
     while (feof(fp2) != true){
 
         fgets(row, MAXCHAR, fp2);
- 
 
         token = strtok(row, "\t");
         /*printf("%d, %d, %s\n", i, j, token);*/
+        table[i][j] = atoi(token);
         j++;
 
         while(token != NULL){
@@ -84,122 +175,37 @@ void main(void){
         if (i==16){
             break;
         }
+    }
+
+
+    int checksum = 0;
+
+    for (int r=0; r<nrows; r++){
+        int rowmin = 99999;
+        int rowmax = -1;
+
+        for (int c=0; c<ncols; c++){
+            if (table[r][c] > rowmax){
+                rowmax = table[r][c];
+            }
+            if (table[r][c] < rowmin){
+                rowmin = table[r][c];
+            }
+        }
+
+        int rowdiff = rowmax - rowmin;
+        checksum = checksum + rowdiff;
 
     }
 
-    int r=3;
-    int c=6;
-
-    printf("%s", "xxx\n");
-    printf("%d, %d, %d\n", r, c,  table[r][c]);
-    printf("%s", "xxx\n");
-
-
-
-
- 
-
-
-
-
+    printf("Checksum: %d\n", checksum);
 
 }
     
 
 
 
-
-
-
-
-
-    /*char *found1;*/
-    /*char *content1 = readFile("./input.prod");*/
-    /*while (( found1 = strsep(&content1, "\t")) != NULL){*/
-        /*nele++;*/
-    /*}*/
-
-    /*char *found2;*/
-    /*char *content2 = readFile("./input.prod");*/
-    /*while (( found2 = strsep(&content2, "\n")) != NULL){*/
-        /*nrows++;*/
-    /*}*/
-
-    /*ncols = nele / nrows;*/
-
-    /*printf("nele=%d\n", nele);*/
-    /*printf("nrows=%d\n", nrows);*/
-    /*printf("ncols=%d\n", ncols);*/
-
-    /*char *table[nrows][ncols];*/
-
-    /*char *found3;*/
-    /*char *content3 = readFile("./input.prod");*/
-    /*int i=0;*/
-    /*int j=0;*/
-    /*int counter = 0;*/
-    /*while (( found3 = strsep(&content3, "\t")) != NULL){*/
-
-        /*table[j][i] = found3;*/
-        /*counter++;*/
-
-        /*i++;*/
-        /*if (i==16){*/
-            /*i=0;*/
-            /*j++;*/
-        /*}*/
-
-
-    /*}*/
-
-    /*int r = 2;*/
-    /*int c = 0;*/
-    /*printf("%s\n", "xxxx");*/
-    /*printf("%s\n", table[r][c]);*/
-    /*printf("%s\n", "xxxx");*/
-
-
-    
-    /*for (int i; i<241; i++){*/
-        /*found = strsep(&content1, "\t");*/
-        /*printf("%s..", found);*/
-        /*if (i % 16 ==0){*/
-            /*printf("%s", "..");*/
-        /*}*/
-    /*}*/
-
-
-
-
-    /*while  ((found = strsep(&content1, "\t")) != NULL ){*/
-        /*nele++;*/
-    /*} */
-
-    /*printf("%d\n", nele);*/
-
-
-    /*while  ((found = strsep(&content1, "\n")) != NULL ){*/
-        /*nrows++;*/
-    /*} */
-
-    /*char *content2 = readFile("./input.prod");*/
-    /*while  ((found = strsep(&content2, "\t")) !=NULL ){*/
-        /*nele++;*/
-    /*}*/
-
-    /*printf("%d\n", nrows);*/
-    /*printf("%d\n", nele);*/
-
-    /*ncols = */
-
-
-/*    while  ((found = strsep(&content, "\t")) !=NULL ){*/
-        /*printf("%sxx", found);*/
-    /*} */
-
-
-    /*printf("%s", content);*/
-
-
-
-
+void main(void){
+    part1();
+    part2();
+}
