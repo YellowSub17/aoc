@@ -1,0 +1,51 @@
+
+
+#include <stdio.h>
+#include <math.h>
+
+
+int twonp1s(int n){
+    return (2*n+1)*(2*n+1);
+}
+
+int square_size(int pos){
+    int n=0;
+    while (((2*n+1)*(2*n+1)) <= pos){
+        n++;
+    };
+    return (2*n+1);
+
+}
+
+int unwrap(int ss, int pos){
+
+    int max_pos = (ss)*(ss);
+
+    int bot_l = max_pos - ss - 1;
+    int top_l = bot_l - ss - 1;
+    int top_r = top_l - ss - 1;
+    int min_pos = (ss-1)*(ss-1) +1;
+
+    printf("%d %d %d %d %d\n", max_pos, bot_l, top_l, top_r, min_pos);
+
+    return 0;
+
+
+}
+
+
+int main(void){
+
+    /*int input = 289326;*/
+    int input = 49;
+
+    int ss = square_size(input);
+
+    int x = unwrap(ss, input);
+
+
+
+    return 0;
+}
+
+
