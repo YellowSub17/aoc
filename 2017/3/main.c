@@ -64,15 +64,15 @@ int unwrap(int ss, int pos){
 
 int main(void){
 
-    /*int input = 289326;*/
-    /*int ss = square_size(input);*/
-    /*int d = unwrap(ss, input);*/
-    /*printf("PART 1: %d\n", d);*/
+    int input = 289326;
+    int ss = square_size(input);
+    int d = unwrap(ss, input);
+    printf("PART 1: %d\n", d);
 
 
     /*int input = 747;*/
     /*int ss = square_size(input);*/
-    int ss = 7;
+    /*int ss = 15;*/
 
     int data[ss][ss];
     memset( data, 0, ss*ss*sizeof(int) );
@@ -113,50 +113,65 @@ int main(void){
     }
 
 
-    printf("x: %s", "\n");
-    for (int s=0; s<ss*ss; s++){
-        printf("%d", x_moves[s]);
-    }
-    printf("%s", "\n");
+    /*printf("x: %s", "\n");*/
+    /*for (int s=0; s<ss*ss; s++){*/
+        /*printf("%d", x_moves[s]);*/
+    /*}*/
+    /*printf("%s", "\n");*/
 
 
-    printf("y: %s", "\n");
-    for (int s=0; s<ss*ss; s++){
-        printf("%d", y_moves[s]);
-    }
-    printf("%s", "\n");
+    /*printf("y: %s", "\n");*/
+    /*for (int s=0; s<ss*ss; s++){*/
+        /*printf("%d", y_moves[s]);*/
+    /*}*/
+    /*printf("%s", "\n");*/
 
 
 
-    
-    /*printf("%d %d\n", i, j);*/
+    int i = (ss-1)/2;
+    int j = (ss-1)/2;
+    data[i][j] = 1;
 
 
-    for (int posx=1;posx<15; posx++){
+    int ans = 0;
+    for (int pos=0; pos<9*ss; pos++){
 
-        int i = (ss-1)/2;
-        int j = (ss-1)/2;
-        data[i][j] = 1;
+        i = i + x_moves[pos];
+        j = j + y_moves[pos];
 
+        int tally = 0;
 
-        for (int pos=0; pos<posx; pos++){
+        tally = tally +data[i+1][j];
+        tally = tally +data[i-1][j];
 
-            i = i + x_moves[pos];
-            j = j + y_moves[pos];
-            /*printf("i=%d j=%d ymoves[pos]=%d xmoves[pos]=%d\n", i, j, y_moves[pos], x_moves[pos]);*/
-            data[i][j] = (pos+2) % 10;
+        tally = tally +data[i][j+1];
+        tally = tally +data[i][j-1];
+
+        tally = tally +data[i+1][j-1];
+        tally = tally +data[i-1][j-1];
+
+        tally = tally +data[i+1][j+1];
+        tally = tally +data[i-1][j+1];
+
+        /*data[i][j] = (pos+2) % 10;*/
+        data[i][j] = tally;
+        if (tally > input){
+            ans=tally;
+            break;
         }
 
-        for (int ii = 0; ii<ss; ii++){
-            for (int jj = 0; jj<ss; jj++){
-                printf("%d ", data[ii][jj]);
-            }
-            printf("%s", "\n");
-        }
-
-        printf("%s", "\n");
-
     }
+    printf("PART 2: %d\n", ans);
+
+    /*for (int ii = 0; ii<ss; ii++){*/
+        /*for (int jj = 0; jj<ss; jj++){*/
+            /*printf("%d ", data[ii][jj]);*/
+        /*}*/
+        /*printf("%s", "\n");*/
+    /*}*/
+
+    /*printf("%s", "\n");*/
+
 
 
 
