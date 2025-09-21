@@ -1,0 +1,1 @@
+Filter<Filter<Map<std::ops::Range<usize>, {closure@src/main.rs:45:26: 45:29}>, for<'a> fn(&'a String) -> bool {adj_digits}>, for<'a> fn(&'a String) -> bool {inc_digits}>

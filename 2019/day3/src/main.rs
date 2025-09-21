@@ -42,29 +42,55 @@ fn main() {
                              .map(split_inst)
                              .collect();
     
-    //let pos1 = gen_pos(w1);
-    //let pos2 = gen_pos(w2);
-    //let x = cmp_pos(pos1, pos2);
+
+
+    let w1corners = gen_corners(&w1);
+    let w2corners = gen_corners(&w2);
+    let min_int = find_wire_intersections(&w1corners,&w2corners)
+                        .into_iter()
+                        .map(manhat_dist)
+                        .min()
+                        .unwrap();
+
+    println!("PART1: {}",min_int);
+
     
-    let w1corners = gen_corners(w1);
-    let w2corners = gen_corners(w2);
-    let x = find_wire_intersections(w1corners,w2corners);
 
-    println!("{:?}", x);
+    let pos1 = gen_pos(&w1);
+    let pos2 = gen_pos(&w2);
 
 
+    for interseciton in find_wire_intersections(&w1corners, &w2corners){
+        println!("{:?}", interseciton);
+
+        let mut tp1: u32 = 0;
+        let mut tp2: u32 = 0;
+        for pos in &pos1 {
+            if pos.x==interseciton.x && pos.y==interseciton.y{
+                println!("{}", tp1);
+                break
+            }
+            tp1+=1;
+        }
+        for pos in &pos2 {
+            if pos.x==interseciton.x && pos.y==interseciton.y{
+                println!("{}", tp2);
+                break
+            }
+            tp2+=1;
+        }
+
+        println!("SUM: {}", tp1+tp2);
+
+
+    }
 
 
 
+}
 
-
-    /*let x = calc_seg_intersection(*/
-        /*Segment{p1:Point{x:2,y:6},p2:Point{x:10,y:6}},*/
-        /*Segment{p1:Point{x:4,y:2},p2:Point{x:100,y:434}},*/
-    /*);*/
-    /*println!("{:?}", x);*/
-
-
+fn manhat_dist(p: Point) -> u32{
+    (p.x.abs()+p.y.abs()).try_into().unwrap()
 }
 
 
@@ -116,10 +142,10 @@ fn calc_seg_intersection( s1: Segment, s2: Segment) -> Option<Point>{
 
 }
 
-fn find_wire_intersections( w1corners: Vec<Point>, w2corners: Vec<Point>) -> Vec<Point> {
+fn find_wire_intersections( w1corners: &Vec<Point>, w2corners: &Vec<Point>) -> Vec<Point> {
     
     let mut out: Vec< Point> = vec![];
-    out.push(Point{x:0, y:0});
+    //out.push(Point{x:0, y:0});
 
     for w1window in w1corners.windows(2) {
         let s1: Segment = Segment{ p1: w1window[0], p2:w1window[1]};
@@ -141,7 +167,7 @@ fn find_wire_intersections( w1corners: Vec<Point>, w2corners: Vec<Point>) -> Vec
 
 
 
-fn gen_corners(w: Vec<Instruction>) -> Vec<Point>{
+fn gen_corners(w: &Vec<Instruction>) -> Vec<Point>{
 
     let mut current_x: i32 = 0;
     let mut current_y: i32 = 0;
@@ -185,7 +211,7 @@ fn cmp_pos( pos1: Vec<Point>, pos2: Vec<Point>) -> Vec<Point> {
     out
 }
 
-fn gen_pos(w: Vec<Instruction> ) -> Vec<Point> {
+fn gen_pos(w: &Vec<Instruction> ) -> Vec<Point> {
 
     let mut current_x: i32 = 0;
     let mut current_y: i32 = 0;
