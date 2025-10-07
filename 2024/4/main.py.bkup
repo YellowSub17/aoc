@@ -1,0 +1,191 @@
+
+
+import numpy as np
+
+
+with open('./input.test3', 'r') as f:
+    cont = f.read().split('\n')[:-1]
+
+
+ws = np.array( [list(line) for line in cont], dtype=bytes)
+
+ws[ws==b'X'] = 0
+ws[ws==b'M'] = 1
+ws[ws==b'A'] = 2
+ws[ws==b'S'] = 3
+ws[ws==b'.'] = 9
+ws = ws.astype(int)
+
+NROWS, NCOLS = ws.shape
+print(f'{NROWS=},{NCOLS=} ')
+
+print(ws)
+
+
+
+
+
+
+def search_S(x,y):
+    # sli = ws[y:y+4, x]
+    sli = ws[x:x+4, y]
+    if len(sli) <4:
+        return 0
+    if np.all(sli == [0,1,2,3]):
+        return 1
+    else:
+        return 0
+
+
+
+def search_N(x,y):
+    # sli = ws[y-3:y+1, x]
+    sli = ws[x-3:x+1, y]
+    if len(sli) <4:
+        return 0
+    if np.all(sli == [3,2,1,0]):
+        return 1
+    else:
+        return 0
+
+
+
+
+def search_E(x,y):
+    # sli = ws[y, x:x+4]
+    sli = ws[x, y:y+4]
+    if len(sli) <4:
+        return 0
+    if np.all(sli == [0,1,2,3]):
+        return 1
+    else:
+        return 0
+
+
+
+def search_W(x,y):
+    # sli = ws[y, x-3:x+1]
+    sli = ws[x, y-3:y+1]
+    if len(sli) <4:
+        return 0
+    if np.all(sli == [3,2,1,0]):
+        return 1
+    else:
+        return 0
+
+
+
+def search_SE(x,y):
+    if x > NCOLS -3 or y> NROWS -3:
+        print('oob')
+        return 0
+
+    MAS = ws[x+1, y+1], ws[x+2, y+2], ws[x+3,y+3]
+
+    # print(MAS)
+
+    if MAS == (1,2,3):
+        return 1
+    else:
+        return 0
+
+def search_NW(x,y):
+    if x < 2 or y < 2:
+        # print('oob')
+        return 0
+
+    MAS = ws[x-1, y-1], ws[x-2, y-2], ws[x-3,y-3]
+
+    if MAS == (1,2,3):
+        return 1
+    else:
+        return 0
+
+def search_NE(x,y):
+    if x < 2 or y > NROWS-3:
+        return 0
+    MAS = ws[x-1, y+1], ws[x-2, y+2], ws[x-3,y+3]
+
+    if MAS == (1,2,3):
+        return 1
+    else:
+        return 0
+
+def search_SW(x,y):
+    if x < 2 or y > NROWS-3:
+        print('oob')
+        return 0
+
+    MAS = ws[x+1, y-1], ws[x+2, y-2], ws[x+3,y-3]
+
+    if MAS == (1,2,3):
+        return 1
+    else:
+        return 0
+
+
+
+def search_all(x,y):
+    found = 0
+    for fn in [search_N, search_S, search_E, search_W, search_NE, search_SE, search_NW, search_SW]:
+        found += fn(x,y)
+
+    return found
+
+
+
+
+
+
+X_loc = np.where(ws==0)
+print(X_loc)
+
+
+
+for x,y  in zip(X_loc[0], X_loc[1]):
+    print(f'{x=}', f'{y=}')
+
+
+
+print(f'{search_SE(0, 2)=}')
+print(f'{search_S(0, 2)=}')
+
+print(f'{search_N(5, 0)=}')
+print(f'{search_E(5, 0)=}')
+
+
+print(f'{search_NE(9, 1)=}')
+
+print(f'{search_W(10,5)=}')
+
+print(f'{search_SW(10,5)=}')
+
+print(f'{search_NW(16,5)=}')
+# print(f'{search_SW(6,5)=}')
+
+
+# ..X...
+# ..MM..
+# S.A.A.
+# A.S..S
+# M.....
+# XMAS..
+# ......
+# ......
+# ......
+# ......
+# ..SAMX
+# ....M.
+# ...A..
+# ..S...
+
+
+
+
+
+# founds = map(search_all, X_loc[0], X_loc[1])
+
+# print(sum(founds))
+
+
+
