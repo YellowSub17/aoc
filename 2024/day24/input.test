@@ -1,0 +1,5 @@
+x00: 1
+x01: 0
+
+x00 AND x01 -> abc
+x01 AND x02 -> def
