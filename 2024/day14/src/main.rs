@@ -42,20 +42,15 @@ fn part2() {
 
     let mut robots: Vec<Robot> = read_input().into_iter().map(Robot::new).collect();
 
-    let imin = 10000;
-    let imax = 10050;
+    let imin = 0;
+    let imax = 7000;
     
     for i in imin..imax {
         print!("\r{}", i);
         io::stdout().flush().unwrap();
         let mut img = GrayImage::new(NX.into(), NY.into());
 
-        //img.put_pixel(0, 0, Rgb([255,0,0]));
-        //img.put_pixel(0, 1, Rgb([255,0,0]));
-        //img.put_pixel(1, 1, Rgb([255,0,0]));
-        //img.put_pixel(0, 2, Rgb([255,0,0]));
-        //img.put_pixel(1, 2, Rgb([255,0,0]));
-        //img.put_pixel(2, 2, Rgb([255,0,0]));
+  
 
         for mut robot in &mut robots {
             robot.run_n(1);
@@ -63,32 +58,28 @@ fn part2() {
             };
 
 
+        let mut vert_flag = false;
+        for i_x in 0..NX {
+            let mut white_count = 0;
+            for i_y in 0..NY{
+                if *img.get_pixel(i_x.into(), i_y.into()) == Luma([255]) {
+                    white_count +=1;
+                }
+            }
+            if white_count> 20{
+                vert_flag = true;
 
+            }
+        }
+
+
+
+
+
+
+        if vert_flag {
         img.save(format!("./imgs/i{}.png", i));
-
-        /*let mut red_count1 = 0;*/
-        /*let mut red_count2 = 0;*/
-        /*let mut red_count3 = 0;*/
-
-        /*for pix_x in 0..NX {*/
-            /*if *img.get_pixel( pix_x.into(), 0) == Rgb([255,0,0]) {*/
-                /*red_count1+=1;*/
-            /*}*/
-
-            /*if *img.get_pixel( pix_x.into(), 1) == Rgb([255,0,0]) {*/
-                /*red_count2+=1;*/
-            /*}*/
-
-            /*if *img.get_pixel( pix_x.into(), 2) == Rgb([255,0,0]) {*/
-                /*red_count3+=1;*/
-            /*}*/
-        /*}*/
-
-
-        /*if red_count1== 1 && red_count2==2 && red_count3==3 {*/
-            /*img.save(format!("./imgs/i{}.png", i));*/
-        /*}*/
-
+        }
 
 
     }
