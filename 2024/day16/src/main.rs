@@ -9,27 +9,15 @@ use objects::{*};
 
 
 fn main() {
-    part1();
-}
-
-fn part1() {
-
-
     let x = find_cheapest();
-    //println!("{:?}", x.unwrap());
-    
-
-
+    println!("{:?}", x);
 
 }
+
 
 
 fn find_cheapest() -> Option<Journey> {
     let (tiles, start_i, end_i) = generate_tiles();
-
-    //for row in &tiles {
-    //println!("{:?}", row);
-    //}
 
     let start_node: Node = Node{dir:Direction::E, coord: start_i};
 
@@ -41,32 +29,38 @@ fn find_cheapest() -> Option<Journey> {
         end_coord: end_i,
     };
 
-    println!("{:?}", j0);
-    //println!("{:?}", j0.get_neighbors(&Node{coord: (5,5), dir:Direction::N}));
-
-
-    // DOES THE EXTENSION ON SINGLE MOVES, BUT NEEDS TO UPDATE COST
-    println!("{:?}", j0.get_next_moves(&j0.current_node, &tiles));
+    j0.draw_out(&tiles, "imgs/j0.png".to_string());
 
 
 
+    let mut iter_count: usize = 0;
+
+    let mut heap = BinaryHeap::new();
+    heap.push(j0);
+
+    while let Some(j) = heap.pop() {
+        iter_count+=1;
+
+        if iter_count <= 30 {
+            let fname: String = format!("imgs/j{}.png", iter_count);
+            j.draw_out(&tiles, fname);
+
+        } else {
+            return None
+        }
 
 
 
-  /*  let mut heap = BinaryHeap::new();*/
-    /*heap.push(j0);*/
 
-    /*while let Some(j) = heap.pop() {*/
-        /*//println!("{:?}", heap.len());*/
-        /*println!("{:?}", j.current_cost);*/
-        /*if j.current_node.coord == j.end_coord {*/
-            /*return Some(j);*/
-        /*}*/
+        if j.current_node.coord == j.end_coord {
+            return Some(j);
+        }
 
-        /*for n in j.get_next_moves( &tiles) {*/
-            /*heap.push(n);*/
-        /*}*/
-    /*}*/
+        for n in j.get_next_moves( &tiles) {
+            heap.push(n);
+        }
+    }
+
     None
 }
  
