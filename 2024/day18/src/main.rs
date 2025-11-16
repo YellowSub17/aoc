@@ -8,18 +8,62 @@ const NX:usize = 71;
 const NY:usize = 71;
 
 fn main() {
-    //part1();
+    part1();
+    part2();
 }
     
+
+fn part2() {
+
+    let address_i: usize = 3030;
+    let mut mem:Vec<Vec<bool>> = vec![vec![false; NX]; NY];
+    let addresses = read_input();
+    for (x,y) in &addresses[..address_i] {
+        mem[*y][*x] = true;
+    }
+
+    let mut count:usize = 0;
+    for (x,y) in &addresses[address_i..] {
+        println!("{}", count+address_i);
+        if count>10 {
+            break
+        }
+        mem[*y][*x] = true;
+        match shortest_path(&mem) {
+            Some(sp) => {
+                let mut path:Vec<Vec<bool>> = vec![vec![false; NX]; NY];
+                for (x,y) in &sp {
+                        path[*y][*x] = true;
+                    }
+                let img_nx:u32 = (NX*9) as u32;
+                let img_ny:u32 = (NY*9) as u32;
+                let mut img = RgbImage::new(img_nx,img_ny);
+                img = draw_mem(&mem, img.clone(), 255,0,0);
+                img = draw_mem(&path, img.clone(), 0,255,255);
+                img.save("solp2a.png".to_string());
+                img.save(format!("solp2i{}.png", count+address_i));
+            },
+            None => {println!("{}, {}", x, y);
+                    let img_nx:u32 = (NX*9) as u32;
+                    let img_ny:u32 = (NY*9) as u32;
+                    let mut img = RgbImage::new(img_nx,img_ny);
+                    img = draw_mem(&mem, img.clone(), 255,0,0);
+                    //img.save("solp2b.png".to_string());
+                    img.save(format!("solp2i{}.png", count+address_i));
+                },
+            }
+
+        count+=1;
+        }
+
+}
 
 
 
 fn part1() {
     let mut mem:Vec<Vec<bool>> = vec![vec![false; NX]; NY];
     let mut path:Vec<Vec<bool>> = vec![vec![false; NX]; NY];
-    for row in &mem{
-        println!("{:?}", row);
-    }
+
 
     let addresses = read_input();
 
@@ -43,10 +87,9 @@ fn part1() {
     img = draw_mem(&path, img.clone(), 0,255,255);
 
 
-    img.save("sol.png".to_string());
+    img.save("solp1.png".to_string());
 
 
-    println!("{:?}", sp);
 
 
 
@@ -143,3 +186,4 @@ fn draw_mem(mem: &Vec<Vec<bool>>, mut img: RgbImage, r:u8, g:u8, b:u8) -> RgbIma
 
 
 
+//12,69
