@@ -1,6 +1,6 @@
 
 
-with open('./input.test') as f:
+with open('./input.prod') as f:
     contents = f.read()[:-1].split(',')[:]
 
     ranges_str =list( map(lambda s: s.split('-'), contents))
@@ -20,29 +20,23 @@ def is_invalid_str_p1(s):
     else:
         return False
 
+
+
+
 def is_invalid_str_p2(s):
-    len_s = len(s)
+    len_s = len(s) # 1188511885 -> 10
 
-## count if all the digits appear an equal number of times:
-    counts = {}
-    for c in s:
-        if c not in counts:
-            counts[c]=1
-        else:
-            counts[c] +=1
+    
+    for len_part in range(1, len_s): #test length of part 1,2,3,4,5..., 9
+        # print(f'length of part: {len_part}')
 
-    print(counts)
-    n = None #number of partitions
-    for c in counts:
-        if n is None:
-            n=counts[c]
-        else:
-            if counts[c] !=n:
-                return False
+# if the partition length isn't divisible by the total length, try the next part
+        if len_s % len_part !=0:
+            continue
 
+        n_parts = len_s//len_part
+        # print('### nparts', n_parts)
 
-
-    len_n = len(s)//n
 
     #if n is 2, the each char appears twice, so split str into two
     #if n is 3, the each char appears thrice, so split str into three
@@ -58,38 +52,44 @@ def is_invalid_str_p2(s):
     # 012 345 678 901 234
     # abc abc abc abc abc
 
-    splts = []
-    for i in range(n):
-        l = i*len_n
-        r = i*len_n+len_n
-        # splts.append(s[l:r])
-        splts.append((s[l:r], l, r))
+        splts = []
+        for i in range(n_parts):
+            l = i*len_part
+            r = (i+1)*len_part
+            splts.append(s[l:r])
 
 
-    for splt in splts[1:]:
-        if splt[0] != splts[0][0]:
-            return False
+        not_this_splts = False
+        for splt in splts[1:]:
+            if splt != splts[0]:
+                not_this_splts = True
+                break
+
+        if not_this_splts:
+            continue
+        else:
+            # print(splts)
+            return True
+
+    return False
 
 
-    print('\t',s, splts)
-    return True
 
 
-
-print(is_invalid_str_p2('1188511885'))
+# print(is_invalid_str_p2('11851188511885'))
 
 
 
 
-# invalids = []
-# for range_start, range_end in ranges_ints:
+invalids = []
+for range_start, range_end in ranges_ints:
     # print(f'###{range_start} {range_end}')
-    # for i in range(range_start, range_end+1):
-        # # print('\t', i, is_invalid_str_p2(str(i)))
-        # if is_invalid_str_p2(str(i)):
-            # invalids.append(i)
+    for i in range(range_start, range_end+1):
+        # print('\t', i, is_invalid_str_p2(str(i)))
+        if is_invalid_str_p2(str(i)):
+            invalids.append(i)
 
-# print(sum(invalids))
+print(sum(invalids))
 
 
 

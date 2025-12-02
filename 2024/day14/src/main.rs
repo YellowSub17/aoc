@@ -74,9 +74,6 @@ fn part2() {
 
 
 
-
-
-
         if vert_flag {
         img.save(format!("./imgs/i{}.png", i));
         }
@@ -86,8 +83,6 @@ fn part2() {
 
 
 
-
-        //};
 }
 
 
