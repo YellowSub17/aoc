@@ -15,10 +15,10 @@ banks =  list(map(list, contents))
 
 digits = 12
 
-# banks = ['111987654321111']
+banks = ['987654321111119']
+
 for i_row, bank in enumerate(banks):
     print()
-    # print(f'row:\t\t{i_row}')
     row_arr = np.array( list(map(int, bank)))
 
     print(f'row_arr:\t\t{row_arr}')
@@ -26,17 +26,18 @@ for i_row, bank in enumerate(banks):
     joltage = 0
 
     start = 0
-    end = len(row_arr) -12
+    # end = len(row_arr) - digits
 
 
-    for i_digit in range(digits, 0, -1):
-        end = len(row_arr) - i_digit +1
-        print(f'\t{i_digit} dig, start: {start}, end: {end}')
-
+    for ith_digit in range(digits, 0, -1):
+        end = len(row_arr) - ith_digit +1
+        print(f'\t{i_digit} digit, start: {start}, end: {end}')
 
         row_sub_arr = row_arr[start:end]
         print(f'\trow_sub:\t', end='')
         print(f'{row_arr[:start]}//{row_arr[start:end]}//{row_arr[end:]}')
+
+        print(f'\txxxxxxxx\t', end='')
 
 
         max_of_row_sub = np.max(row_sub_arr)
