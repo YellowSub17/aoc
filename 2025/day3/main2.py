@@ -1,7 +1,7 @@
 
 
 import numpy as np
-fname = './input.prod'
+fname = './input.test'
 
 with open(fname) as f:
     print(f'Loading {fname}')
@@ -15,38 +15,82 @@ arr = np.zeros( (NY, NX))
 jolts = np.zeros( NY)
 
 banks =  list(map(list, contents))
+
+
+
+
+digits = 3
+
 for i_row, bank in enumerate(banks):
     print()
-    print(f'row: {i_row}')
+    print(f'row:\t\t{i_row}')
     row_arr = np.array( list(map(int, bank)))
+
+    print(f'row_arr:\t\t{row_arr}')
     arr[i_row] = row_arr
 
+    joltage = 0
 
-    max_of_row = np.max(row_arr)
-    tens_ind = np.where(row_arr ==np.max(row_arr))[0].min()
-    if tens_ind != NX-1:
-        row_sub_arr = row_arr[tens_ind+1:]
+    start_range = 0
 
-        ones_ind = np.where(row_sub_arr ==np.max(row_sub_arr))[0].min()+tens_ind+1
-
-        print(row_arr)
-        print(row_sub_arr)
-    else:
-
-        print(row_arr)
-
-        tens_ind = np.where(row_arr[:-1] ==np.max(row_arr[:-1]))[0].min()
-        ones_ind = -1
+    end_range = -1*(digits-1)
 
 
-    print(tens_ind, ones_ind)
-    print(row_arr[tens_ind], row_arr[ones_ind])
+    for i_digit in range(digits, 0, -1):
+        print(f'\t{i_digit} dig, {start_range} {end_range}')
 
-    jolts[i_row]=  10*row_arr[tens_ind] + row_arr[ones_ind]
+
+        row_sub_arr = row_arr[start_range:end_range]
+        print(f'\trow_sub:\t{row_sub_arr}')
+
+
+        max_of_row_sub = np.max(row_sub_arr)
+
+        max_of_row_ind = np.where(row_sub_arr == max_of_row_sub)[0].min()
+
+        joltage += max_of_row_sub*10**(i_digit-1)
+
+        start_range = start_range+max_of_row_ind+1
+        end_range = -1*(i_digit-1)
+
+
+
+    print(joltage)
+
+    jolts[i_row]=  joltage
 
 print(sum(jolts))
 
 
+
+# print(arr)
+
+
+
+# def find_max_joltage(arr, current_joltage, n):
+    # print()
+    # print('finding max joltage: ',  arr,  current_joltage, n)
+
+    # if n==0:
+        # return current_joltage
+
+    # max_of_row = np.max(row_arr)
+    # ind = np.where(row_arr ==np.max(row_arr))[0].min()
+    # print(f'{ind=}')
+
+    # if ind > len(arr) -n:
+        # print('idk')
+        # return -1
+
+    # new_joltage= current_joltage + (10**(n-1))*row_arr[ind]
+    # print(new_joltage)
+
+    # sub_arr = row_arr[ind+1:]
+
+    # return find_max_joltage(sub_arr, new_joltage, n-1)
+
+
+# print(find_max_joltage(arr[0], 0, 2))
 
 
 
