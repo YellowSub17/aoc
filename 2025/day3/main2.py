@@ -8,7 +8,7 @@ with open(fname) as f:
     contents = f.read().split('\n')[:-1]
 
 # print(contents)
-NX = len(contents[0])
+NX = len(contents[0]) +1
 NY = len(contents)
 
 arr = np.zeros( (NY, NX))
@@ -24,10 +24,10 @@ digits = 3
 for i_row, bank in enumerate(banks):
     print()
     print(f'row:\t\t{i_row}')
-    row_arr = np.array( list(map(int, bank)))
+    row_arr = np.array( list(map(int, bank)) + [0])
 
     print(f'row_arr:\t\t{row_arr}')
-    arr[i_row] = row_arr
+    # arr[i_row] = row_arr
 
     joltage = 0
 
