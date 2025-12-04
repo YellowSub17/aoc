@@ -35,22 +35,7 @@ def is_invalid_str_p2(s):
             continue
 
         n_parts = len_s//len_part
-        # print('### nparts', n_parts)
 
-
-    #if n is 2, the each char appears twice, so split str into two
-    #if n is 3, the each char appears thrice, so split str into three
-
-    # 0123 4567
-    # abcd abcd 
-
-    # 012 345 678 : n=3
-    # abc abc abc
-
-    # n=5, len_n=3
-    #              11 111
-    # 012 345 678 901 234
-    # abc abc abc abc abc
 
         splts = []
         for i in range(n_parts):

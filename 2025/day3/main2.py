@@ -49,9 +49,6 @@ for i_row, bank in enumerate(banks):
 
         start= start+max_of_row_ind+1
 
-
-
-
     print(joltage)
 
     jolts[i_row]=  joltage
@@ -62,5 +59,7 @@ print(sum(jolts))
 
 
 #172895362045136 too low
+#172981362045136 answer
+
 
 
