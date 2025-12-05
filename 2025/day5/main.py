@@ -54,18 +54,28 @@ fresh_ranges = list(map(split_range, fresh_ranges))
 
 fresh_ranges.sort(key = lambda r: r[0])
 
+
+
 fresh_ranges_no_overlap = []
 current_start = -1
 current_stop = -1
 
-for start, stop in  fresh_ranges:
+for start, stop in  sorted(fresh_ranges):
+    print((start,stop), current_start, current_stop, start> current_stop)
+    # breakpoint()
     if start> current_stop:
-        fresh_ranges_no_overlap.append( (start, stop) )
         current_start, current_stop = start, stop
+        fresh_ranges_no_overlap.append( (start, stop) )
+        print('appended',  (start, stop) )
+
+    elif current_stop> stop:
+        continue
 
     else:
-        fresh_ranges_no_overlap[-1] = (current_start, stop)
         current_stop = max(current_stop, stop)
+        fresh_ranges_no_overlap[-1] = (current_start, stop)
+
+        print('moified end', (current_start, stop) )
 
 
 
@@ -107,106 +117,13 @@ for start, stop in  fresh_ranges:
 
 
 
-fresh_ranges.sort(key = lambda r: r[0])
-
-count = 0
-for i, fresh_range in enumerate(fresh_ranges):
-    print(i, fresh_range)
-
-    
-
-
-
-
-
-
-
-
-
-# fresh_ranges.sort(key = lambda r: r[0]) #sort by the starts of the ranges
-
-# fresh_ranges_no_overlap = []
-
-# count  =0
-# # while count <10:
-# while len(fresh_ranges)>0:
-    # count +=1
-
-    # #find the smallest ending range value
-    # fresh_ranges.sort(key = lambda r: r[1]) #sort by the starts of the ranges
-    # smend = fresh_ranges[0][1]
-
-    # #find the smallest starting range value
-    # fresh_ranges.sort(key = lambda r: r[0]) #sort by the starts of the ranges
-    # smstart = fresh_ranges[0][0]
-
-    # fresh_ranges_no_overlap.append( (smstart, smend))
-    
-    # fresh_ranges.pop(0)
-
-
-# for i in fresh_ranges_no_overlap:
-    # print(i)
-
-
-# fresh_ranges_no_overlap_comp = []
-
-# skip_once=False
-# for i, ( fresh_range_n, fresh_range_n1) in enumerate(zip(fresh_ranges_no_overlap[:-1], fresh_ranges_no_overlap[1:])):
-    # if skip_once:
-        # skip_once=False
-        # continue
-
-    # if fresh_range_n[1] < fresh_range_n1[0]:
-        # fresh_ranges_no_overlap_comp.append(fresh_range_n)
-    # else:
-        # fresh_ranges_no_overlap_comp.append((fresh_range_n[0], fresh_range_n1[1]))
-        # skip_once = True
-
-
-
-# print('####')
-# for i in fresh_ranges_no_overlap_comp:
-    # print(i)
-
-
-
-
-
-
-
-
-
-
-
-# skip_once=False
-# for i, ( fresh_range_n, fresh_range_n1) in enumerate(zip(fresh_ranges[:-1], fresh_ranges[1:])):
-    # if skip_once:
-        # skip_once=False
-        # continue
-
-    # if fresh_range_n1[1] < fresh_range_n[1]:  #if the current range completly encloses the next range, skip the next one
-        # fresh_ranges_no_overlap.append(fresh_range_n)
-        # skip_once = True
-
-
-
-    # elif fresh_range_n[1] < fresh_range_n1[0]: #if the current range stops before the next one begins
-        # fresh_ranges_no_overlap.append(fresh_range_n)
-
-    # else:
-        # fresh_ranges_no_overlap.append( (fresh_range_n[0], fresh_range_n1[0]-1) )
-
-# fresh_ranges_no_overlap.append(fresh_ranges[-1])
-
-
-
 
 
 
 count = 0
 
 for fresh_range in fresh_ranges_no_overlap:
+    print(fresh_range, 1+fresh_range[1]-fresh_range[0])
     count += 1+fresh_range[1]-fresh_range[0]
 
 print(count)
@@ -214,6 +131,8 @@ print(count)
 
 # 316924510848106 too low
 # 317225287022946 too low
+
+# 331492094722011 wrong
 
 # 340828799014220 too high
 
