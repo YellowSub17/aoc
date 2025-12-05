@@ -54,59 +54,53 @@ fresh_ranges = list(map(split_range, fresh_ranges))
 
 
 
-fresh_ranges.sort(key = lambda r: r[0])
+fresh_ranges.sort(key = lambda r: r[0]) #sort by the starts of the ranges
 
 fresh_ranges_no_overlap = []
 
-# fresh_ranges_no_overlap.append(fresh_ranges[0])
+count  =0
+while count <10:
+    count +=1
 
+    #find the smallest ending range value
+    fresh_ranges.sort(key = lambda r: r[1]) #sort by the starts of the ranges
+    smend = fresh_ranges[0][0]
 
-# while len(fresh_ranges)>0:
+    #find the smallest starting range value
+    fresh_ranges.sort(key = lambda r: r[0]) #sort by the starts of the ranges
+    smstart = fresh_ranges[0][0]
 
-    # fresh_ranges.sort(key = lambda r: r[0])
-
-    # lhs = fresh_ranges[0]
-
-    # fresh_ranges.sort(key = lambda r: r[1])
-
-    # rhs = fresh_ranges[0]
-
-    # fresh_ranges_no_overlap.append((lhs[0], rhs[1]))
-
-    # fresh_ranges.pop(0)
-
-
-
+    fresh_ranges_no_overlap.append( (smstart, smend))
     
+    fresh_ranges.pop(0)
+
+print(fresh_ranges_no_overlap)
 
 
 
 
 
+# skip_once=False
+# for i, ( fresh_range_n, fresh_range_n1) in enumerate(zip(fresh_ranges[:-1], fresh_ranges[1:])):
+    # if skip_once:
+        # skip_once=False
+        # continue
+
+    # if fresh_range_n1[1] < fresh_range_n[1]:  #if the current range completly encloses the next range, skip the next one
+        # fresh_ranges_no_overlap.append(fresh_range_n)
+        # skip_once = True
 
 
 
+    # elif fresh_range_n[1] < fresh_range_n1[0]: #if the current range stops before the next one begins
+        # fresh_ranges_no_overlap.append(fresh_range_n)
 
-for i, ( fresh_range_n, fresh_range_n1) in enumerate(zip(fresh_ranges[:-1], fresh_ranges[1:])):
+    # else:
+        # fresh_ranges_no_overlap.append( (fresh_range_n[0], fresh_range_n1[0]-1) )
 
-    # print(fresh_range_n, fresh_range_n1)
-    if fresh_range_n[1] < fresh_range_n1[0]:
-        fresh_ranges_no_overlap.append(fresh_range_n)
-    elif fresh_range_n[1] >= fresh_range_n1[1]:
-        fresh_ranges_no_overlap.append(fresh_range_n)
-    else:
-        fresh_ranges_no_overlap.append( (fresh_range_n[0], fresh_range_n1[0]-1) )
-
-fresh_ranges_no_overlap.append(fresh_ranges[-1])
+# fresh_ranges_no_overlap.append(fresh_ranges[-1])
 
 
-
-
-
-
-for i, ( fresh_range_n, fresh_range_n1) in enumerate(zip(fresh_ranges_no_overlap, fresh_ranges_no_overlap[1:])):
-    print(fresh_range_n, fresh_range_n1)
-    print(fresh_range_n[1]< fresh_range_n1[0])
 
 
 
