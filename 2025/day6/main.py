@@ -6,6 +6,9 @@
 
 #part2
 #7.06 am
+#818 restart
+#8.51 (but got it right about 10 min before)
+
 
 
 
@@ -37,88 +40,112 @@
 
 
 
-with open('./input.test') as f:
+# with open('./input.test') as f:
+    # contents = f.read().split('\n')[:-1]
+# s = ''
+# for r1, r2, r3, r4 in zip(*contents):
+    # s+=f'{r1}{r2}{r3}{r4}\n'
+
+
+
+# blocks = s.split('    \n')
+
+
+
+
+with open('./input.prod') as f:
     contents = f.read().split('\n')[:-1]
+s = ''
+for r1, r2, r3, r4, r5 in zip(*contents):
+    s+=f'{r1}{r2}{r3}{r4}{r5}\n'
 
-
-line1 = list(map(int, contents[0].split(' ')))
-line2 = list(map(int, contents[1].split(' ')))
-line3 = list(map(int, contents[2].split(' ')))
-ops = contents[4].split()
-
-
-print(ops)
+blocks = s.split('     \n')
 
 
 
+def parse_block(b):
+
+    lines = b.split('\n')
+    # print(lines)
+    op = lines[0][-1]
+    xs = []
+    xs.append(int(lines[0][:-1]))
+    for line in lines[1:]:
+        if line=='':
+            continue
+        xs.append(int(line))
+    return op, xs
 
 
+# print(blocks[2])
+# print( parse_block(blocks[2]))
+
+eqs= map(parse_block, blocks)
 
 
+count = 0
+for op, xs in eqs:
+    print(op, xs)
+    if op=='*':
+        c = 1
+        for x in xs:
+            c*=x
 
+    else:
+        c = 0
+        for x in xs:
+            c+=x
 
+    count += c
 
+print(count)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def ceph_maths(x1,x2,x3,op):
-
-    count = 0
-
-
-    x1_dig =  list(map(int, str(x1)))
-    x2_dig =  list(map(int, str(x2)))
-    x3_dig =  list(map(int, str(x3)))
-
-    print(x1_dig)
-    print(x2_dig)
-    print(x3_dig)
-    print('#')
-
-    max_len = max( len(x1_dig), len(x2_dig), len(x3_dig) )
-
-    x1_dig +=  (max_len - len(x1_dig))*[0]
-    x2_dig +=  (max_len - len(x2_dig))*[0]
-    x3_dig +=  (max_len - len(x3_dig))*[0]
-
-
-
-
-    print(x1_dig)
-    print(x2_dig)
-    print(x3_dig)
+#943490003265 too low
 
 
 
 
 
-    print('$$$$', count)
-    return count
+
+# def ceph_maths(x1,x2,x3,op):
+
+    # count = 0
 
 
-# print(ceph_maths(123, 45, 6, '*'))
-# print(ceph_maths(328, 64, 98, '+'))
-print(ceph_maths(51, 387, 215, '*'))
-print(ceph_maths(64, 23, 314, '+'))
+    # x1_dig =  list(map(int, str(x1)))
+    # x2_dig =  list(map(int, str(x2)))
+    # x3_dig =  list(map(int, str(x3)))
+
+    # print(x1_dig)
+    # print(x2_dig)
+    # print(x3_dig)
+    # print('#')
+
+    # max_len = max( len(x1_dig), len(x2_dig), len(x3_dig) )
+
+    # x1_dig +=  (max_len - len(x1_dig))*[0]
+    # x2_dig +=  (max_len - len(x2_dig))*[0]
+    # x3_dig +=  (max_len - len(x3_dig))*[0]
+
+
+
+
+    # print(x1_dig)
+    # print(x2_dig)
+    # print(x3_dig)
+
+
+
+
+
+    # print('$$$$', count)
+    # return count
+
+
+# # print(ceph_maths(123, 45, 6, '*'))
+# # print(ceph_maths(328, 64, 98, '+'))
+# print(ceph_maths(51, 387, 215, '*'))
+# print(ceph_maths(64, 23, 314, '+'))
 
 
 
