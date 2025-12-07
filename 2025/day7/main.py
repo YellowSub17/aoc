@@ -8,17 +8,18 @@ import time
 
 
 
-with open('./input.test') as f:
+with open('./input.test2') as f:
     contents = f.read().split('\n')[:-1]
 rows = []
 for row in contents:
     rows.append(list(row))
 
 char_arr = np.array(rows)
+char_arr[np.where(char_arr=='S')] = '|'
 
-int_arr = np.zeros(char_arr.shape)
-int_arr[np.where(char_arr=='S')] =1
-int_arr[np.where(char_arr=='^')] =1
+# int_arr = np.zeros(char_arr.shape)
+# int_arr[np.where(char_arr=='S')] =1
+# int_arr[np.where(char_arr=='^')] =1
 
 # plt.figure()
 # plt.imshow(int_arr)
@@ -28,14 +29,14 @@ int_arr[np.where(char_arr=='^')] =1
 
 
 
-
+splits_cache = {}
 
 
 
 
 class Sim:
 
-    def __init__(self, char_arr, i_row=0, split_count=0):
+    def __init__(self, char_arr, i_row=0, split_count=0, last_splits = [] ):
         self.char_arr = char_arr
 
         self.nrows = self.char_arr.shape[0]
@@ -43,6 +44,7 @@ class Sim:
 
         self.i_row = i_row
         self.split_count = split_count
+        self.last_splits = last_splits
 
 
 
@@ -53,7 +55,7 @@ class Sim:
 
         for i_col in range(1, self.ncols-1):
             if self.char_arr[self.i_row, i_col] =='.':
-                if self.char_arr[self.i_row-1, i_col] == 'S' or self.char_arr[self.i_row-1, i_col] == '|':
+                if self.char_arr[self.i_row-1, i_col] == '|':
                     new_row[i_col] = '|'
 
             if self.char_arr[self.i_row, i_col] =='^':
@@ -67,47 +69,57 @@ class Sim:
 
 
 
-    def multiverse_step(self):
+
+    def multiverse_step(self, last_split):
 
         self.i_row +=1
-        # new_rowL = self.char_arr[self.i_row, :]
-        # new_rowR = self.char_arr[self.i_row, :]
-        if self.i_row >= self.nrows:
-            return None
 
-        for i_col in range(1, self.ncols-1):
 
-            if self.char_arr[self.i_row, i_col] =='.':
-                if self.char_arr[self.i_row-1, i_col] == 'S' or self.char_arr[self.i_row-1, i_col] == '|':
-                    new_char_arr = np.copy(self.char_arr)
+        i_col = np.where(self.char_arr[self.i_row-1]=='|')[0][0]
 
-                    new_char_arr[self.i_row, i_col] = '|'
 
-                    self.char_arr = new_char_arr
-                    return [self]
+        while self.char_arr[self.i_row, i_col] == '.':
+            self.char_arr[self.i_row, i_col] == '|'
+            self.i_row+=1
 
-                    # return [Sim(new_char_arr, i_row=self.i_row, split_count = self.split_count)]
 
-            if self.char_arr[self.i_row, i_col] =='^':
-                if self.char_arr[self.i_row-1, i_col] == '|':
+            if self.i_row >= self.nrows:
+                return 1, last_split
 
-                    new_char_arrL = np.copy(self.char_arr)
-                    new_char_arrR = np.copy(self.char_arr)
 
-                    self.split_count +=1
-                    new_char_arrL[self.i_row, i_col-1] = '|'
-                    new_char_arrR[self.i_row, i_col+1] = '|'
 
-                    self.char_arr = new_char_arrL
-                    return [
-                            self
-                            Sim(new_char_arrR, i_row=self.i_row, split_count = self.split_count),
-                            ]
 
-                    # return [
-                            # Sim(new_char_arrL, i_row=self.i_row, split_count = self.split_count),
-                            # Sim(new_char_arrR, i_row=self.i_row, split_count = self.split_count),
-                            # ]
+
+
+
+        # if self.char_arr[self.i_row, i_col] =='.':
+
+            # new_char_arr = np.copy(self.char_arr)
+
+            # new_char_arr[self.i_row, i_col] = '|'
+
+            # return [Sim(new_char_arr, i_row=self.i_row, split_count = self.split_count)], last_split
+
+        # if self.char_arr[self.i_row, i_col] =='^':
+
+
+
+            # if (self.i_row, i_col) in splits_cache:
+                # return splits_cache[(self.i_row, i_col)
+
+        new_char_arrL = np.copy(self.char_arr)
+        new_char_arrR = np.copy(self.char_arr)
+
+        new_char_arrL[self.i_row, i_col-1] = '|'
+        new_char_arrR[self.i_row, i_col+1] = '|'
+
+
+        return [
+                Sim(new_char_arrL, i_row=self.i_row, split_count = self.split_count),
+                Sim(new_char_arrR, i_row=self.i_row, split_count = self.split_count),
+                ], (self.i_row, i_col)
+
+        # return 1, last_split
 
 
 
@@ -140,35 +152,39 @@ class Sim:
 # print(s.split_count)
 
 
+last_split = (-1,-1)
+finished_count = 0
+split_count = 0
+
 init_s = Sim(char_arr)
 
-universes = init_s.multiverse_step()
-finished_count = 0
+universes, (last_split) = init_s.multiverse_step(last_split)
 
 
 
 
 t1 = time.time()
-count = 0
+
 
 while len(universes)>0:
-    count+=1
-    if count >5000:
-        break
+    # breakpoint()
+    # if finished_count>8:
+        # break
     # print(len(universes))
 
     this_uni = universes.pop(-1)
     # print('\n'*25, this_uni)
-    # time.sleep(0.05)
 
 
-    next_unis = this_uni.multiverse_step()
+    next_unis, (last_split) = this_uni.multiverse_step(last_split)
 
-    if next_unis is None:
-        finished_count +=1
+    if type(next_unis) == int:
+        finished_count += next_unis
         print(this_uni)
+        # time.sleep(0.01)
     else:
         universes += next_unis
+
 t2 = time.time()
 print(t2-t1)
 
@@ -184,17 +200,20 @@ print(finished_count)
 
 
 
-# for _ in range(s.nrows-1):
-    # print('\n'*25, s)
-    # s = s.multiverse_step()[0]
-    # time.sleep(0.1)
 
 
-# print(s.multiverse_step()[0].multiverse_step()[1].multiverse_step()[0].multiverse_step()[0])
+
+# # for _ in range(s.nrows-1):
+    # # print('\n'*25, s)
+    # # s = s.multiverse_step()[0]
+    # # time.sleep(0.1)
 
 
-## 3236 too low
-## 1170769 too low 
+# # print(s.multiverse_step()[0].multiverse_step()[1].multiverse_step()[0].multiverse_step()[0])
+
+
+# ## 3236 too low
+# ## 1170769 too low 
 
 
 
