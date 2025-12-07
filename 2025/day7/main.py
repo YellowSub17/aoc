@@ -8,7 +8,7 @@ import time
 
 
 
-with open('./input.prod') as f:
+with open('./input.test') as f:
     contents = f.read().split('\n')[:-1]
 rows = []
 for row in contents:
@@ -136,18 +136,22 @@ init_s = Sim(char_arr)
 universes = init_s.multiverse_step()
 finished_count = 0
 
-while len(universes)>0:
-    print(len(universes))
 
-    this_uni = universes.pop(0)
+
+
+while len(universes)>0:
+    # print(len(universes))
+
+    this_uni = universes.pop(-1)
     # print('\n'*25, this_uni)
-    # time.sleep(0.01)
+    # time.sleep(0.05)
 
 
     next_unis = this_uni.multiverse_step()
 
     if next_unis is None:
         finished_count +=1
+        print(this_uni)
     else:
         universes += next_unis
 
@@ -173,6 +177,7 @@ print(finished_count)
 
 
 ## 3236 too low
+## 1170769 too low 
 
 
 
