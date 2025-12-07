@@ -83,7 +83,10 @@ class Sim:
 
                     new_char_arr[self.i_row, i_col] = '|'
 
-                    return [Sim(new_char_arr, i_row=self.i_row, split_count = self.split_count)]
+                    self.char_arr = new_char_arr
+                    return [self]
+
+                    # return [Sim(new_char_arr, i_row=self.i_row, split_count = self.split_count)]
 
             if self.char_arr[self.i_row, i_col] =='^':
                 if self.char_arr[self.i_row-1, i_col] == '|':
@@ -95,10 +98,16 @@ class Sim:
                     new_char_arrL[self.i_row, i_col-1] = '|'
                     new_char_arrR[self.i_row, i_col+1] = '|'
 
+                    self.char_arr = new_char_arrL
                     return [
-                            Sim(new_char_arrL, i_row=self.i_row, split_count = self.split_count),
+                            self
                             Sim(new_char_arrR, i_row=self.i_row, split_count = self.split_count),
                             ]
+
+                    # return [
+                            # Sim(new_char_arrL, i_row=self.i_row, split_count = self.split_count),
+                            # Sim(new_char_arrR, i_row=self.i_row, split_count = self.split_count),
+                            # ]
 
 
 
@@ -139,7 +148,13 @@ finished_count = 0
 
 
 
+t1 = time.time()
+count = 0
+
 while len(universes)>0:
+    count+=1
+    if count >5000:
+        break
     # print(len(universes))
 
     this_uni = universes.pop(-1)
@@ -154,6 +169,8 @@ while len(universes)>0:
         print(this_uni)
     else:
         universes += next_unis
+t2 = time.time()
+print(t2-t1)
 
 print(finished_count)
 
