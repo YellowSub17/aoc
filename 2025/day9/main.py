@@ -84,48 +84,53 @@ count =0
 max_area =0
 
 pair_start =4163
+# for i, (p1, p2) in enumerate(pairs[::1]):
 # for i, (p1, p2) in enumerate(pairs[pair_start::1]):
-for i, (p1, p2) in enumerate([ [ (97323, 56370), (3121, 59426)] ]):
+# [83075, 85213] [16219, 15814]
+for i, (p1, p2) in enumerate([ [[83075, 85213], [16219, 15814]] ]):
 
 
     print(i, end='\r')
 
     xmin = min(p1[0], p2[0])
-    xmax = max(p1[0], p2[0])
+    xmax = max(p1[0], p2[0]) + 1
 
     ymin = min(p1[1], p2[1])
-    ymax = max(p1[1], p2[1])
+    ymax = max(p1[1], p2[1]) +1
     x = xmax-xmin
     y = ymax-ymin
     # print(xmin, xmax, ymin, ymax)
 
 
     vcrop = vertical_line_segs[:]
-    vcrop = list(filter(lambda ls:  ls.ys.min()<ymax and ls.ys.max()>ymin, vcrop))
+    # vcrop = list(filter(lambda ls:  ls.ys.min()<ymax and ls.ys.max()>ymin, vcrop))
+    # vcrop = list(filter(lambda ls: ls.c>=xmin and ls.c<=xmax, vcrop))
     vcrop = list(filter(lambda ls: ls.c>=xmin and ls.c<=xmax, vcrop))
+    vcrop = list(filter(lambda ls:  ls.ys.min()>ymin or ls.ys.max()<ymax, vcrop))
 
     hcrop = horizontal_line_segs[:]
-    hcrop = list(filter(lambda ls:  ls.xs.min()<xmax and ls.xs.max()>xmin, hcrop))
     hcrop = list(filter(lambda ls: ls.c>=ymin and ls.c<=ymax, hcrop))
+    hcrop = list(filter(lambda ls:  ls.xs.min()>xmin or  ls.xs.max()<xmax, hcrop))
 
 
-#     plt.figure()
-    # for ls in line_segs:
-        # ls.plot(color=(0.0, 0.0, 0.0))
-    # for ls in vcrop:
-        # ls.plot(color='r', linewidth=1)
-    # for ls in hcrop:
-        # ls.plot(color='r', linewidth=1)
-    # plt.plot( [p1[0], p2[0], p2[0], p1[0], p1[0]], [p1[1], p1[1], p2[1], p2[1], p1[1]], color='m', ls='dashed')
-    # plt.plot(p1[0], p1[1], 'g.', ms=25)
-    # plt.plot(p2[0], p2[1], 'm.', ms=25)
+    plt.figure()
+    for ls in line_segs:
+        ls.plot(color=(0.0, 0.0, 0.0))
+    for ls in vcrop:
+        ls.plot(color='r', linewidth=1)
+    for ls in hcrop:
+        ls.plot(color='r', linewidth=1)
+    plt.plot( [p1[0], p2[0], p2[0], p1[0], p1[0]], [p1[1], p1[1], p2[1], p2[1], p1[1]], color='m', ls='dashed')
+    plt.plot(p1[0], p1[1], 'g.', ms=25)
+    plt.plot(p2[0], p2[1], 'm.', ms=25)
+    plt.show()
+
+
     # plt.show()
 
-
-    # plt.show()
-
-    if len(hcrop)>0 or len(vcrop)>0:
+    if len(hcrop)+len(vcrop)>3:
         continue
+
     print()
     print()
     count +=1
@@ -135,26 +140,28 @@ for i, (p1, p2) in enumerate([ [ (97323, 56370), (3121, 59426)] ]):
         max_area=area
         print('new max area!', p1, p2)
         print(max_area)
-        plt.figure()
-        for ls in line_segs:
-            ls.plot(color=(0.0, 0.0, 0.0))
-        for ls in vcrop:
-            ls.plot(color='r', linewidth=1)
-        for ls in hcrop:
-            ls.plot(color='r', linewidth=1)
-        plt.plot( [p1[0], p2[0], p2[0], p1[0], p1[0]], [p1[1], p1[1], p2[1], p2[1], p1[1]], color='m', ls='dashed')
-        plt.plot(p1[0], p1[1], 'g.', ms=25)
-        plt.plot(p2[0], p2[1], 'm.', ms=25)
-        plt.show()
+
+        # plt.figure()
+        # for ls in line_segs:
+            # ls.plot(color=(0.0, 0.0, 0.0))
+        # for ls in vcrop:
+            # ls.plot(color='r', linewidth=1)
+        # for ls in hcrop:
+            # ls.plot(color='r', linewidth=1)
+        # plt.plot( [p1[0], p2[0], p2[0], p1[0], p1[0]], [p1[1], p1[1], p2[1], p2[1], p1[1]], color='m', ls='dashed')
+        # plt.plot(p1[0], p1[1], 'g.', ms=25)
+        # plt.plot(p2[0], p2[1], 'm.', ms=25)
+        # plt.show()
+
     print()
     print()
 print('###')
-print(max_area)
+print(f'{count=}')
+print(f'{max_area}')
 
 
 #287881312 too low
-
-
+#1528567740 too low
 
     # print(vcrop_start, vcrop_end, hcrop_start, hcrop_end)
 
