@@ -2,12 +2,13 @@
 
 import numpy as np
 import itertools
+from scipy.optimize import linprog
 
 
 
 
 
-with open('./input.test') as f:
+with open('./input.prod') as f:
     contents = f.read().split('\n')[:-1]
 
 
@@ -18,10 +19,6 @@ class Machine:
     def __init__(self, input_str):
 
         self.input_str = input_str
-        # self.cache = {():0}
-        # self.dead_ends = set()
-        self.solved_history = [0]*10000
-        self.solve_called = 0
 
         sp = self.input_str.split(' ')
 
@@ -34,21 +31,49 @@ class Machine:
 
         # self.current_jolts = np.zeros(self.target_jolts.shape, dtype=int)
 
-        self.actions = []
+        actions = []
         for action in sp[1:-1]:
             act = np.zeros( self.target_jolts.shape, dtype=int)
             for c in action[1:-1:2]:
                 act[int(c)] = 1
-            self.actions.append(act)
+            actions.append(act)
 
-        self.actions.sort(key=lambda s: s.sum(), reverse=True)
+        # self.actions.sort(key=lambda s: s.sum(), reverse=True)
 
-
-
-
+        self.actions_arr = np.array(actions)
 
 
-    # def solve(self,):
+
+
+
+
+
+
+
+
+
+
+    def solve(self,):
+
+
+        A = self.actions_arr.copy().T
+
+        c = np.ones(A.shape[1], dtype=int)
+
+        b = self.target_jolts.copy()
+
+
+        print(c)
+        print(A)
+        print(b)
+
+        # res = linprog( c, A_eq=A, b_eq=b)
+        res = linprog( c, A_eq=A, b_eq=b, integrality=1)
+
+        return res.x
+
+
+
 
 
 
@@ -101,22 +126,30 @@ class Machine:
 
 
 
-m = Machine(contents[0])
-print(m.actions)
+# m = Machine(contents[0])
+
+
+# print(m.solve())
 # print('###')
 # m.solve()
 # print(m.current_min)
 
 
-# ans=  []
-# for line in contents:
-    # m = Machine(line)
-    # print(m.actions)
-    # m.solve()
-    # ans.append(m.current_min)
-    # print(m.solve_count)
+ans=  []
+for line in contents:
+    m = Machine(line)
+    s = m.solve()
 
-# print(ans)
+    print(s, sum(s))
+
+    ans.append(sum(s))
+
+    # breakpoint()
+    # ans.append(np.sum(np.round(m.solve())))
+
+print(sum(ans))
+
+#21004 too low
 
 
 

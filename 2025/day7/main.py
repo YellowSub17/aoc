@@ -8,7 +8,8 @@ import time
 
 
 
-with open('./input.test3') as f:
+with open('./input.prod') as f:
+
     contents = f.read().split('\n')[:-1]
 rows = []
 for row in contents:
@@ -105,13 +106,13 @@ class Sim:
         elif splits_cache[(self.i_row, i_col)][0]==2:
 
             # self.char_arr[self.i_row, i_col] = '*'
-            print(f'Cool! you found the node {(self.i_row, i_col)} where we are about to repeat the calculation')
+            # print(f'Cool! you found the node {(self.i_row, i_col)} where we are about to repeat the calculation')
             # print(f'This node has {splits_cache[(self.i_row, i_col)][1]} ends below it')
             add_amount = splits_cache[(self.i_row, i_col)][1]
             for split in self.last_splits:
                 splits_cache[split][1] += add_amount
 
-            print(splits_cache)
+            # print(splits_cache)
 
             return -1
 
@@ -193,15 +194,15 @@ t1 = time.time()
 
 
 while len(universes)>0:
-    print()
-    print()
-    print()
-    print('-----------')
+    # print()
+    # print()
+    # print()
+    # print('-----------')
 
 
     this_uni = universes.pop(-1)
 
-    print(this_uni)
+    # print(this_uni)
 
 
 
@@ -219,30 +220,30 @@ while len(universes)>0:
                 this_uni.char_arr[split[0], split[1]] = f'*'
 
         print(this_uni)
-        print('Hit rock bottom')
+        # print('Hit rock bottom')
 
 
 
-        for i_split, split in enumerate(this_uni.last_splits):
-            print(i_split, split, splits_cache[split])
-        print(splits_cache)
+        # for i_split, split in enumerate(this_uni.last_splits):
+            # print(i_split, split, splits_cache[split])
+        # print(splits_cache)
         # print(f'Visited this split {splits_cache[last_split][0]} times.')
         # print(f'This branch terminates {splits_cache[last_split][1]} times.')
         # time.sleep(0.01)
 
     elif type(next_unis) == int:
 
-        print(this_uni)
-        for i_split, split in enumerate(this_uni.last_splits):
-            print(i_split, split, splits_cache[split])
-        print(splits_cache)
+        # print(this_uni)
+        # for i_split, split in enumerate(this_uni.last_splits):
+            # print(i_split, split, splits_cache[split])
+        # print(splits_cache)
         # print(f'Visited this split {splits_cache[last_split][0]} times.')
         # print(f'This branch terminates {splits_cache[last_split][1]} times.')
-        print('-----------')
-        print()
-        print()
-        print()
-        print('-----------')
+        # print('-----------')
+        # print()
+        # print()
+        # print()
+        # print('-----------')
         continue
 
     else:
