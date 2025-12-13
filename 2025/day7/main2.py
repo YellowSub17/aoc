@@ -39,17 +39,9 @@ class Sim:
 
     def __init__(self, char_arr,):
         self.char_arr = char_arr
-
         self.nrows = self.char_arr.shape[0]
         self.ncols = self.char_arr.shape[1]
-
         self.total_timelines = 0
-
-
- 
-
-
-
 
 
     def solve(self, start=None, history = []):
@@ -59,40 +51,30 @@ class Sim:
             col = int(np.where(self.char_arr[0]=='|')[0][0])
             start = (0, col)
 
-        # print(start, history)
-        # self.show_path(start, history)
-        # print(splits_cache)
-        # breakpoint()
-
-
-
         row = start[0]
         col = start[1]
 
+        #while there is empty space below
         while self.char_arr[row, col] == '.':
-            # self.char_arr[row, col] = '|'
             row+=1
-
-            if row >= self.nrows:
-                # last_split = history[-1]
-                # splits_cache[last_split] +=1
-                # self.total_timelin
+            if row >= self.nrows: #if you hit the bottom
                 return 1
 
+        #at this point, we hit a splitter at the end of the while loop
 
+        #if the current split is not in the cache
         if (row, col) not in splits_cache:
-            # splits_cache[(row,col)] = 0
-
             next_history = history + [(row,col)]
 
-
+            #we need to solve the lhs and rhs of the branch
             lhs = self.solve(start=(row, col-1), history=next_history)
             rhs = self.solve(start=(row, col+1), history=next_history)
 
+            #add it to the cache
             splits_cache[(row, col)] = lhs+rhs
             return lhs+rhs
 
-        else:
+        else: #if the current split is in the cache, return the precalc'd value
             return splits_cache[(row, col)]
 
 
