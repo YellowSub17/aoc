@@ -14,59 +14,59 @@ for line in contents:
     sp = line.split(' ')
     connections[sp[0][:-1]] = sp[1:]
 
-
-reverse_connections = {}
-
-for k, v in connections.items():
-    for c in v:
-        if c not in reverse_connections:
-            reverse_connections[c] = []
-        reverse_connections[c].append(k)
-
-print(reverse_connections)
+connections['out'] = []
 
 
-solved_paths = set()
-def solve(current_connection=None,history=[]):
 
 
-    if current_connection is None:
-        current_connection = 'svr'
 
 
-    # print(current_connection)
-    # print(history)
-    # breakpoint()
+def solve(current_connection, end_connection, cache={}):
+
+    if current_connection == end_connection:
+        return 1
+
+    else:
+        if current_connection in cache:
+            return cache[current_connection]
+
+        else:
+            ans = 0
+            for next_connection in connections[current_connection]:
+                ans += solve(next_connection, end_connection, cache=cache)
+            cache[current_connection] = ans
+
+            return ans
 
 
-    next_history = history + [current_connection]
 
-    if current_connection == 'out':
+# print('part1:')
+# c1 = {}
+# count = solve('you', 'out', c1)
+# print(count)
 
-        if 'fft' in history and 'dac' in history:
-            solved_paths.add(tuple(next_history))
-        return None
+print('part2:')
 
-    print(len(solved_paths))
+# x1 = solve('svr', 'dac')*solve('dac', 'fft')*solve('fft', 'out')
+# x2 = solve('svr', 'fft')*solve('fft', 'dac')*solve('dac', 'out')
+# print(x1, x2)
 
-
-    for next_connection in connections[current_connection]:
-
-        if next_connection in next_history:
-            print('History repeats!')
-            return None
-
-        x = solve(next_connection, next_history)
+# x2 = solve('svr', 'dac', cache=c2)
+# x2 = solve('dac', 'fft', cache=c2)
 
 
-out = solve()
 
-count = 0
-for path in solved_paths:
-    if 'fft' in path and 'dac' in path:
-        count +=1
-    print(path)
+c1 = {}
+x1 = solve('svr', 'fft', cache=c1)
+c2 = {}
+x2 = solve('fft', 'dac', cache=c2)
+c3 = {}
+x3 = solve('dac', 'out', cache=c3)
 
 
-print(count)
+print(x1*x2*x3)
 
+# x2 = solve('svr', 'fft')
+
+
+# print(x2)
